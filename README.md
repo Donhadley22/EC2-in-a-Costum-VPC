@@ -19,8 +19,9 @@ Before using this Terraform script, make sure you have the following:
 ## Commands Used
 
 ### Change into the project directory:
+```
 - cd <project-directory>
-
+```
 ### Initialize Terraform:
 - terraform init
 
@@ -70,3 +71,9 @@ Confirm the destruction by typing yes when prompted
 - key_name: Key pair name for SSH access.
 - user_data: User data script for EC2 instance configuration.
 
+Feel free to customize the variables and configurations based on your specific requirements.
+
+Happy deploying!
+
+## Author
+### Bernard Chika Uwaezuoke
