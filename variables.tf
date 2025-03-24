@@ -84,3 +84,15 @@ variable "region" {
   type = string
   default = "us-east-1"
 }
+
+variable "Aws_Secret_access_key" {
+  description = "AWS Secret Access Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "Aws_Access_key" {
+  description = "AWS Access Key"
+  type        = string
+  sensitive   = true
+}
