@@ -79,3 +79,8 @@ variable "server_name" {
     default = "webserver"
   
 }
+
+variable "region" {
+  type = string
+  default = "us-east-1"
+}
