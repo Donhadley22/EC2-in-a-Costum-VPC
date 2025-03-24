@@ -1,10 +1,10 @@
 # 1. Create a VPC
 resource "aws_vpc" "our-vpc" {
-  cidr_block       = "10.0.0.0/16"
+  cidr_block       = var.vpc_cidr
   instance_tenancy = "default"
 
   tags = {
-    Name = "our-vpc"
+    Name = var.vpc_name
   }
 }
 # Create internet Gateway
@@ -12,7 +12,7 @@ resource "aws_internet_gateway" "our-gw" {
   vpc_id = aws_vpc.our-vpc.id
 
   tags = {
-    Name = "our-gw"
+    Name = var.internet_gateway_name
   }
 }
 # Create a route table
@@ -25,25 +25,25 @@ resource "aws_route_table" "our-RT" {
   }
 
   tags = {
-    Name = "our-RT"
+    Name = var.route_table_name
   }
 }
 # Create a Public Subnet
 resource "aws_subnet" "Public" {
   vpc_id     = aws_vpc.our-vpc.id
-  cidr_block = "10.0.1.0/24"
+  cidr_block = var.public_subnet_cidr
 
   tags = {
-    Name = "Public"
+    Name = var.public_subnet_name
   }
 }
 # Create a Private Subnet
 resource "aws_subnet" "Private" {
   vpc_id     = aws_vpc.our-vpc.id
-  cidr_block = "10.0.2.0/24"
+  cidr_block = var.private_subnet_cidr
 
   tags = {
-    Name = "Private"
+    Name = var.private_subnet_name
   }
 }
 # Route table association
@@ -53,7 +53,7 @@ resource "aws_route_table_association" "a" {
 }
 # Create Security Group
 resource "aws_security_group" "our-SG" {
-  name        = "our-SG"
+  name        = var.security_group_name
   description = "Allow SSH, RDP, HTTP & HTTPS inbound traffic"
   vpc_id      = aws_vpc.our-vpc.id
 
@@ -89,27 +89,27 @@ ingress {
   }
   
   tags = {
-    Name = "our-SG"
+    Name = var.security_group_name
   }
 }
 # Create Network Interface
 resource "aws_network_interface" "our-Int" {
   subnet_id       = aws_subnet.Public.id
-  private_ips     = ["10.0.1.20"]
+  private_ips     = var.network_interface_ip
   security_groups = [aws_security_group.our-SG.id]
 }
 # Create Elastic IP address
 resource "aws_eip" "our-eip" {
-  vpc                       = true
+  depends_on = [aws_internet_gateway.our-gw]
   network_interface         = aws_network_interface.our-Int.id
-  associate_with_private_ip = "10.0.1.20"
+  associate_with_private_ip = var.associate_with_private_ip
 }
 # Create EC2 Instance
 resource "aws_instance" "webserver" {
-  ami           = "ami-084e8c05825742534"
-  instance_type = "t2.micro"
-  availability_zone = "eu-west-2a"
-  key_name = "Proj1-KP"
+  ami           = var.ami
+  instance_type = var.instance_type
+  availability_zone = var.availability_zone
+  key_name = var.key_name
   depends_on = [aws_eip.our-eip]
   network_interface {
     device_index = 0
