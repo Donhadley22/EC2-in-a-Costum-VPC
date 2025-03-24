@@ -91,7 +91,7 @@ variable "Aws_Secret_access_key" {
   sensitive   = true
 }
 
-variable "Aws_Access_key" {
+variable "Aws_Access_key_ID" {
   description = "AWS Access Key"
   type        = string
   sensitive   = true
