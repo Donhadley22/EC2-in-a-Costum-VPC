@@ -1,2 +1,5 @@
 .qodo
-
+.terraform
+.terraform.*
+*.tfstate
+*.tfstate.*
